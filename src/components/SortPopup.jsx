@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 
-const SortPopup = () => {
-  const popupNames = ['популярности', 'цене', 'алфавиту'];
+const SortPopup = ({ value, setActivePopup }) => {
+  const popupNames = [
+    { name: 'популярности (DESC)', sort: 'popular' },
+    { name: 'популярности (ASC)', sort: '-popular' },
+    { name: 'цене (DESC)', sort: 'price' },
+    { name: 'цене (ASC)', sort: '-price' },
+    { name: 'алфавиту (DESC)', sort: 'title' },
+    { name: 'алфавиту (ASC)', sort: '-title' },
+  ];
   const [visiblePopup, setVisiblePopup] = useState(false);
-  const [activePopup, setActivePopup] = useState(0);
-
-  const currentPopup = popupNames[activePopup]
 
   const onSetActivePopup = (i) => {
     setActivePopup(i);
@@ -27,14 +31,17 @@ const SortPopup = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setVisiblePopup(!visiblePopup)}>{currentPopup}</span>
+        <span onClick={() => setVisiblePopup(!visiblePopup)}>{value.name}</span>
       </div>
       {visiblePopup && (
         <div className="sort__popup">
           <ul>
-            {popupNames.map((popup, i) => (
-              <li key={popup} onClick={() => onSetActivePopup(i)} className={activePopup === i ? 'active' : ''}>
-                {popup}
+            {popupNames.map((obj, i) => (
+              <li
+                key={i}
+                onClick={() => onSetActivePopup(obj)}
+                className={value.sort === obj.sort ? 'active' : ''}>
+                {obj.name}
               </li>
             ))}
           </ul>
