@@ -11,12 +11,15 @@ const Home = () => {
   React.useEffect(() => {
     fetch('https://629376807aa3e6af1a0bc580.mockapi.io/items')
       .then((res) => res.json())
-      .then((json) => setPizzas(json));
-    setPizzasLoading(false);
+      .then((json) => {
+        setPizzas(json);
+        setPizzasLoading(false);
+      });
+    window.scrollTo(0, 0)
   }, []);
 
   return (
-    <>
+    <div className="container">
       <div className="content__top">
         <Categories />
         <SortPopup />
@@ -27,7 +30,7 @@ const Home = () => {
           ? [...new Array(6)].map((_, i) => <LoadingBlock key={i} />)
           : pizzas.map((obj) => <PizzaBlock key={obj.id} {...obj} />)}
       </div>
-    </>
+    </div>
   );
 };
 
