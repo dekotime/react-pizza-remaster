@@ -4,8 +4,9 @@ import SortPopup from '../components/SortPopup';
 import LoadingBlock from '../components/PizzaBlock/LoadingBlock';
 import PizzaBlock from '../components/PizzaBlock';
 import Pagination from '../components/Pagination';
+import { SearchContext } from '../App';
 
-const Home = ({ searchValue, setSearchValue }) => {
+const Home = () => {
   const [pizzas, setPizzas] = React.useState([]);
   const [pizzasLoading, setPizzasLoading] = React.useState(true);
   const [activeCategory, setActiveCategory] = React.useState(0);
@@ -14,6 +15,7 @@ const Home = ({ searchValue, setSearchValue }) => {
     name: 'популярности',
     sort: 'popular',
   });
+  const { searchValue } = React.useContext(SearchContext);
 
   React.useEffect(() => {
     setPizzasLoading(true);
