@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Categories = ({ value, setActiveCategory }) => {
+const Categories = ({ value, onChangeCategory }) => {
   const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
   const onSetActiveCategory = (id) => {
-    setActiveCategory(id);
+    onChangeCategory(id);
   };
 
   return (

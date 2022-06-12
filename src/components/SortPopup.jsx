@@ -1,18 +1,24 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setSortId } from '../redux/slices/filterSlice';
 
-const SortPopup = ({ value, setActivePopup }) => {
-  const popupNames = [
-    { name: 'популярности (DESC)', sort: 'popular' },
-    { name: 'популярности (ASC)', sort: '-popular' },
-    { name: 'цене (DESC)', sort: 'price' },
-    { name: 'цене (ASC)', sort: '-price' },
-    { name: 'алфавиту (DESC)', sort: 'title' },
-    { name: 'алфавиту (ASC)', sort: '-title' },
-  ];
+const popupNames = [
+  { name: 'популярности (DESC)', sortProperty: 'popular' },
+  { name: 'популярности (ASC)', sortProperty: '-popular' },
+  { name: 'цене (DESC)', sortProperty: 'price' },
+  { name: 'цене (ASC)', sortProperty: '-price' },
+  { name: 'алфавиту (DESC)', sortProperty: 'title' },
+  { name: 'алфавиту (ASC)', sortProperty: '-title' },
+];
+
+const SortPopup = () => {
+  const dispatch = useDispatch();
+  const sort = useSelector((state) => state.filter.sort);
+
   const [visiblePopup, setVisiblePopup] = useState(false);
 
-  const onSetActivePopup = (i) => {
-    setActivePopup(i);
+  const onSetActivePopup = (obj) => {
+    dispatch(setSortId(obj));
     setVisiblePopup(false);
   };
 
@@ -31,7 +37,7 @@ const SortPopup = ({ value, setActivePopup }) => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setVisiblePopup(!visiblePopup)}>{value.name}</span>
+        <span onClick={() => setVisiblePopup(!visiblePopup)}>{sort.name}</span>
       </div>
       {visiblePopup && (
         <div className="sort__popup">
@@ -40,7 +46,7 @@ const SortPopup = ({ value, setActivePopup }) => {
               <li
                 key={i}
                 onClick={() => onSetActivePopup(obj)}
-                className={value.sort === obj.sort ? 'active' : ''}>
+                className={sort.sortProperty === obj.sortProperty ? 'active' : ''}>
                 {obj.name}
               </li>
             ))}
