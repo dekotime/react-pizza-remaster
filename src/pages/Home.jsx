@@ -6,22 +6,26 @@ import PizzaBlock from '../components/PizzaBlock';
 import Pagination from '../components/Pagination';
 import { SearchContext } from '../App';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCategoryId } from '../redux/slices/filterSlice';
+import { setCategoryId, setCurrentPage } from '../redux/slices/filterSlice';
+import axios from "axios";
 
 const Home = () => {
-  const { categoryId, sort } = useSelector((state) => state.filter);
+  const { categoryId, sort, currentPage } = useSelector((state) => state.filter);
   const sortType = sort.sortProperty;
   const dispatch = useDispatch();
 
   const [pizzas, setPizzas] = React.useState([]);
   const [pizzasLoading, setPizzasLoading] = React.useState(true);
-  const [currentPage, setCurrentPage] = React.useState(1);
 
   const { searchValue } = React.useContext(SearchContext);
 
   const onChangeCategory = (id) => {
     dispatch(setCategoryId(id));
   };
+
+  const onChangePage = number => {
+    dispatch(setCurrentPage(number));
+  }
 
   React.useEffect(() => {
     setPizzasLoading(true);
@@ -31,12 +35,12 @@ const Home = () => {
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const search = searchValue ? `&search=${searchValue}` : '';
 
-    fetch(
-      `https://629376807aa3e6af1a0bc580.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        setPizzas(json);
+    axios
+      .get(
+        `https://629376807aa3e6af1a0bc580.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
+      )
+      .then((res) => {
+        setPizzas(res.data);
         setPizzasLoading(false);
       });
     window.scrollTo(0, 0);
@@ -45,10 +49,8 @@ const Home = () => {
   const skeletons = [...new Array(6)].map((_, i) => <LoadingBlock key={i} />);
   const itemsPizzas = pizzas
     .filter((obj) => {
-      if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
-        return true;
-      }
-      return false;
+      return obj.title.toLowerCase().includes(searchValue.toLowerCase());
+
     })
     .map((obj) => <PizzaBlock key={obj.id} {...obj} />);
 
@@ -60,7 +62,7 @@ const Home = () => {
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">{pizzasLoading ? skeletons : itemsPizzas}</div>
-      <Pagination onChangePage={(number) => setCurrentPage(number)} />
+      <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </div>
   );
 };
