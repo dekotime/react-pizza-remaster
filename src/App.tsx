@@ -1,4 +1,3 @@
-import Header from './components/Header';
 import './scss/app.scss';
 import React from 'react';
 import Home from './pages/Home';
@@ -7,8 +6,6 @@ import NotFound from './pages/NotFound';
 import { Route, Routes } from 'react-router-dom';
 import FullPizza from './components/FullPizza';
 import MainLayout from './layouts/MainLayout';
-
-export const SearchContext = React.createContext();
 
 function App() {
   return (
