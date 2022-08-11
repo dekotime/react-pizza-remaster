@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setSortId } from '../redux/slices/filterSlice';
+import {selectSort, setSortId} from '../redux/slices/filterSlice';
 
-export const popupNames = [
+type SortItem = {
+  name: string;
+  sortProperty: string;
+};
+
+export const sortList: SortItem[] = [
   { name: 'популярности (DESC)', sortProperty: 'popular' },
   { name: 'популярности (ASC)', sortProperty: '-popular' },
   { name: 'цене (DESC)', sortProperty: 'price' },
@@ -11,19 +16,19 @@ export const popupNames = [
   { name: 'алфавиту (ASC)', sortProperty: '-title' },
 ];
 
-const SortPopup = () => {
+const Sort = () => {
   const dispatch = useDispatch();
-  const sort = useSelector((state) => state.filter.sort);
-  const sortRef = React.useRef();
+  const sort = useSelector(selectSort);
+  const sortRef = React.useRef<HTMLDivElement>(null);
 
   const [visiblePopup, setVisiblePopup] = useState(false);
 
-  const onSetActivePopup = (obj) => {
+  const onSetActivePopup = (obj: SortItem) => {
     dispatch(setSortId(obj));
     setVisiblePopup(false);
   };
 
-  const onClickBody = (e) => {
+  const onClickBody = (e: any) => {
     if (!e.path.includes(sortRef.current)) {
       setVisiblePopup(false);
     }
@@ -54,7 +59,7 @@ const SortPopup = () => {
       {visiblePopup && (
         <div className="sort__popup">
           <ul>
-            {popupNames.map((obj, i) => (
+            {sortList.map((obj, i) => (
               <li
                 key={i}
                 onClick={() => onSetActivePopup(obj)}
@@ -69,4 +74,4 @@ const SortPopup = () => {
   );
 };
 
-export default SortPopup;
+export default Sort;
