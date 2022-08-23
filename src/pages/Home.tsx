@@ -24,9 +24,9 @@ const Home: React.FC = () => {
     const isSearch = React.useRef(false);
     const isMounted = React.useRef(false);
 
-    const onChangeCategory = (index: number) => {
+    const onChangeCategory = React.useCallback((index: number) => {
         dispatch(setCategoryId(index));
-    };
+    }, []);
 
     const onChangePage = (page: number) => {
         dispatch(setCurrentPage(page));
@@ -100,7 +100,7 @@ const Home: React.FC = () => {
         <div className="container">
             <div className="content__top">
                 <Categories value={categoryId} onChangeCategory={onChangeCategory} />
-                <SortPopup />
+                <SortPopup value={sort} />
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">{status === 'loading' ? skeletons : itemsPizzas}</div>
