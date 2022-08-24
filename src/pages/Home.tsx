@@ -5,16 +5,14 @@ import LoadingBlock from '../components/PizzaBlock/Skeleton';
 import PizzaBlock from '../components/PizzaBlock';
 import Pagination from '../components/Pagination';
 import { useSelector } from 'react-redux';
-import {
-    selectFilter,
-    setCategoryId,
-    setCurrentPage,
-    setFilters,
-} from '../redux/slices/filterSlice';
 import qs from 'qs';
-import { Link, useNavigate } from 'react-router-dom';
-import { fetchPizzas, SearchPizzaParams, selectPizzaData } from '../redux/slices/pizzaSlice';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../redux/store';
+import { selectPizzaData } from '../redux/pizza/selectors';
+import { fetchPizzas } from '../redux/pizza/asyncActions';
+import { SearchPizzaParams } from '../redux/pizza/types';
+import { setCategoryId, setCurrentPage, setFilters } from '../redux/filter/slice';
+import { selectFilter } from '../redux/filter/selectors';
 
 const Home: React.FC = () => {
     const { items, status } = useSelector(selectPizzaData);
